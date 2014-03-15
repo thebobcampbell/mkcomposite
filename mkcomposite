@@ -1,0 +1,11 @@
+#!/bin/sh 
+
+# by Robert Campbell <rsc@indra.com>
+
+set -e
+
+
+seed=`head -1 composefiles`
+cp $seed composite_temp.jpg
+for jpg in `cat composefiles`; do convert -compose lighten -composite $jpg compo
+site_temp.jpg tmp.jpg; mv tmp.jpg composite_temp.jpg; echo $jpg done; done
