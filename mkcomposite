@@ -4,8 +4,37 @@
 
 set -e
 
+# set defaults
+output=composite
+temp=${output}_temp
+input=composefiles
+method=lighten
 
-seed=`head -1 composefiles`
-cp $seed composite_temp.jpg
-for jpg in `cat composefiles`; do convert -compose lighten -composite $jpg compo
-site_temp.jpg tmp.jpg; mv tmp.jpg composite_temp.jpg; echo $jpg done; done
+NARG=$#
+if [ $NARG -eq 0 ]; then
+	echo 1>&2 "usage: mkcomposite [-o output_filename] [-t temp_filename] [-i input_filename] [-m method]"
+	exit 1
+fi
+while [ $NARG -gt 0 ] 
+do
+	case "$1" in
+		-o) output="$2"; shift;;
+		-t) temp=$2; shift;;
+		-i) input="$2"; shift;;
+		-m) method="$2"; shift;;
+		*) break;;
+	esac
+	shift
+done
+
+# seed the destination of the first convert command with the first image in the input file
+# we waste a step by compositing the first image with itself, but this was the easy way. :)
+seed=`head -1 ${input}`
+cp $seed ${temp}.jpg
+
+# iterate through the files listed in the input file, composite that file onto the intermediate composite, output 
+# to tmp.jpg.  Then move the resulting tmp.jpg to the intermediate filename and move on to the next file.
+for jpg in `cat ${input}`; do convert -compose ${method} -composite $jpg ${temp}.jpg tmp.jpg; mv tmp.jpg ${temp}.jpg; echo $jpg done; done
+
+# finally, move the intermediate temporary file to the desired output filename.
+mv ${temp}.jpg ${output}.jpg
