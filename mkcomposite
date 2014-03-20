@@ -10,7 +10,6 @@ temp=${output}_temp
 input=composefiles
 method=lighten
 
-<<<<<<< HEAD
 NARG=$#
 if [ $NARG -eq 0 ]; then
 	echo 1>&2 "usage: mkcomposite [-o output_filename] [-t temp_filename] [-i input_filename] [-m method]"
@@ -39,8 +38,4 @@ for jpg in `cat ${input}`; do convert -compose ${method} -composite $jpg ${temp}
 
 # finally, move the intermediate temporary file to the desired output filename.
 mv ${temp}.jpg ${output}.jpg
-=======
-seed=`head -1 composefiles`
-cp $seed composite_temp.jpg
-for jpg in `cat composefiles`; do convert -compose lighten -composite $jpg composite_temp.jpg tmp.jpg; mv tmp.jpg composite_temp.jpg; echo $jpg done; done
->>>>>>> FETCH_HEAD
+
