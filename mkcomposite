@@ -8,6 +8,7 @@ set -e
 output=composite
 temp=${output}_temp
 input=composefiles
+# valid methods: lighten, darken, lighten_intensity, darken_intensity
 method=lighten
 
 NARG=$#
